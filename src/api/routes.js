@@ -1,4 +1,5 @@
 const express = require('express')
+const {nanoid} = require('nanoid')
 
 const router = express.Router()
 
@@ -14,7 +15,7 @@ router.get('/tasks', (req, res) => {
 
 router.post('/tasks', (req, res) => {
     const data = {
-        id: listOfTasks.length + 1,
+        id: nanoid(16),
         task: req.body.task,
         completed: false,
         created_at: new Date().toISOString(),
