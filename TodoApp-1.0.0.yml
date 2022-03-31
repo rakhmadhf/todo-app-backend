@@ -1,0 +1,66 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://api.server.test/api/v1
+paths:
+  /tasks:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    description: Telling if the responses have any error or not.
+                    default: true
+                  message:
+                    type: string
+                    description: Message of the response
+                    default: Data fetched successfully
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/task"
+components:
+  
+  schemas:
+    errorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          description: Telling if the responses have any error or not.
+          default: false
+        message:
+          type: string
+          description: Message of the response. In this case, the error message.
+          example: Data not found
+    task:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the task
+        task:
+          type: string
+          description: The task that needs to be done
+          example: Buy groceries at the store
+        completed:
+          type: boolean
+          description: Tells if the task is completed or not
+          example: true
+        created_at:
+          type: string
+          description: Tells when the task is created
+          example: 2022-03-31T11:00:00.511Z
+        updated_at:
+          type: string
+          description: Tells when the status of the task is updated
+          example: 2022-03-31T11:00:00.511Z
+
