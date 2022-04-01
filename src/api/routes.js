@@ -37,9 +37,8 @@ router.put('/tasks/:taskId', async (req, res) => {
 
     const selectedTask = await Task.findByPk(taskId)
 
-    console.log(selectedTask)
 
-    selectedTask.completed = completed
+    selectedTask.set({...req.body})
 
     selectedTask.save()
 
