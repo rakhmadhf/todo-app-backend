@@ -1,56 +1,69 @@
 const express = require('express')
-const {nanoid} = require('nanoid')
+
+const Task = require('../models/Task')
 
 const router = express.Router()
 
-let listOfTasks = []
+router.get('/tasks', async (req, res) => {
+    
+    const tasks = await Task.findAll()
 
-router.get('/tasks', (req, res) => {
     res.json({
         ok: true,
         message: "Tasks fetched successfully",
-        data: listOfTasks
+        data: tasks
     })
 })
 
-router.post('/tasks', (req, res) => {
-    const data = {
-        id: nanoid(16),
-        task: req.body.task,
-        completed: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-    }
-    listOfTasks.push(data)
+router.post('/tasks', async (req, res) => {
+
+    const { task } = req.body
+
+    const newTask = await Task.create({
+        task,
+        completed: false
+    })
+
     res.json({
         ok: true,
         message: "New task added",
-        data
+        data: newTask
     })
 })
 
-router.put('/tasks/:taskId', (req, res) => {
+router.put('/tasks/:taskId', async (req, res) => {
+    const { taskId } = req.params
     const { completed } = req.body
-    const selectedIndex = listOfTasks.findIndex((task => task.id == req.params.taskId))
-    const newUpdatedDate = new Date().toISOString()
-    listOfTasks[selectedIndex].completed = completed
-    listOfTasks[selectedIndex].updated_at = newUpdatedDate
+
+    const selectedTask = await Task.findByPk(taskId)
+
+    console.log(selectedTask)
+
+    selectedTask.completed = completed
+
+    selectedTask.save()
 
     res.json({
         ok: true,
         message: "Task updated successfully",
-        data: listOfTasks[selectedIndex]
+        data: selectedTask
     })
 })
 
-router.delete('/tasks/:taskId', (req, res) => {
-    const selectedIndex = listOfTasks.findIndex((task => task.id == req.params.taskId))
+router.delete('/tasks/:taskId', async (req, res) => {
 
-    listOfTasks.splice(selectedIndex, 1)
+    const { taskId } = req.params
+
+    const selectedTask = await Task.findByPk(taskId)
+
+    selectedTask.destroy()
 
     res.json({
         ok: true,
-        message: "Task deleted successfully"
+        message: "Task deleted successfully",
+        data: {
+            id: selectedTask.id
+        }
     })
 })
 

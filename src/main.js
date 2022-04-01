@@ -1,7 +1,10 @@
 const express = require('express')
 const api = require('./api/routes')
+const syncDb = require('./utils/syncDb')
 
 const PORT = 3000
+
+syncDb()
 
 const app = express()
 

@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3",
-    "nanoid": "^3.3.2"
+    "mysql2": "^2.3.3",
+    "nanoid": "^3.3.2",
+    "sequelize": "^6.17.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
