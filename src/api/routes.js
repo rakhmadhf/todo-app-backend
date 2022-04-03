@@ -6,7 +6,11 @@ const router = express.Router()
 
 router.get('/tasks', async (req, res) => {
     try {
-        const tasks = await Task.findAll()
+        const tasks = await Task.findAll({
+            order: [
+                ['id', 'DESC']
+            ]
+        })
 
         res.json({
             ok: true,
@@ -50,6 +54,7 @@ router.post('/tasks', async (req, res) => {
 
 router.put('/tasks/:taskId', async (req, res) => {
     try {
+        const { taskId } = req.params
         const selectedTask = await Task.findByPk(taskId)
 
         selectedTask.set({...req.body})
