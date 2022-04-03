@@ -5,65 +5,94 @@ const Task = require('../models/Task')
 const router = express.Router()
 
 router.get('/tasks', async (req, res) => {
-    
-    const tasks = await Task.findAll()
+    try {
+        const tasks = await Task.findAll()
 
-    res.json({
-        ok: true,
-        message: "Tasks fetched successfully",
-        data: tasks
-    })
+        res.json({
+            ok: true,
+            message: "Tasks fetched successfully",
+            data: tasks
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: "Internal Server Error",
+        })
+        console.log(error)
+    }
 })
 
 router.post('/tasks', async (req, res) => {
 
-    const { task } = req.body
+    try {
+        const { task } = req.body
 
-    const newTask = await Task.create({
-        task,
-        completed: false
-    })
+        const newTask = await Task.create({
+            task,
+            completed: false
+        })
 
-    res.json({
-        ok: true,
-        message: "New task added",
-        data: newTask
-    })
+        res.json({
+            ok: true,
+            message: "New task added",
+            data: newTask
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: "Internal Server Error",
+        })
+        console.log(error)
+    }
+
+    
 })
 
 router.put('/tasks/:taskId', async (req, res) => {
-    const { taskId } = req.params
-    const { completed } = req.body
+    try {
+        const selectedTask = await Task.findByPk(taskId)
 
-    const selectedTask = await Task.findByPk(taskId)
+        selectedTask.set({...req.body})
 
+        selectedTask.save()
 
-    selectedTask.set({...req.body})
-
-    selectedTask.save()
-
-    res.json({
-        ok: true,
-        message: "Task updated successfully",
-        data: selectedTask
-    })
+        res.json({
+            ok: true,
+            message: `Task id #${selectedTask.id} updated`,
+            data: selectedTask
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: "Internal Server Error",
+        })
+        console.log(error)
+    }
+    
 })
 
 router.delete('/tasks/:taskId', async (req, res) => {
+    try {
+        const { taskId } = req.params
 
-    const { taskId } = req.params
+        const selectedTask = await Task.findByPk(taskId)
 
-    const selectedTask = await Task.findByPk(taskId)
+        selectedTask.destroy()
 
-    selectedTask.destroy()
-
-    res.json({
-        ok: true,
-        message: "Task deleted successfully",
-        data: {
-            id: selectedTask.id
-        }
-    })
+        res.json({
+            ok: true,
+            message: `Task id #${selectedTask.id} deleted`,
+            data: {
+                id: selectedTask.id
+            }
+        })
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            message: "Internal Server Error",
+        })
+        console.log(error)
+    }
 })
 
 module.exports = router
