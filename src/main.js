@@ -4,7 +4,7 @@ const cors = require('cors')
 const api = require('./api/routes')
 const syncDb = require('./utils/syncDb')
 
-const PORT = 3001
+const PORT = 3000
 
 syncDb()
 
