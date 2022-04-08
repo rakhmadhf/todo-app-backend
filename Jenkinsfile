@@ -1,5 +1,5 @@
 @Library('km-library@main') _
 
 deliverDockerImage(
-    imageName: 'hifra/todo-app-frontend',
+    imageName: 'hifra/todo-app-backend',
 )
