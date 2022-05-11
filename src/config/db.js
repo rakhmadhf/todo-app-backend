@@ -6,7 +6,6 @@ const vault = new Vault(process.env.VAULT_URL, process.env.JWT_PATH);
 let db_name;
 let db_user;
 let db_password;
-let sequelize;
 
 const fetchConfig = async () => {
     await vault.login();
@@ -19,11 +18,9 @@ const fetchConfig = async () => {
     db_password = config.db_password;
 }
 
-
-
 const initSequelize = () => {
     fetchConfig().then(() => {
-        sequelize = new Sequelize(
+        const sequelize = new Sequelize(
             db_name,
             db_user,
             db_password,
@@ -38,4 +35,4 @@ const initSequelize = () => {
     return sequelize
 }
 
-module.exports = initSequelize;
+module.exports = initSequelize();

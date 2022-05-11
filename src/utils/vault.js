@@ -26,6 +26,8 @@ class Vault {
 
         const responseJson = await response.json();
 
+        console.log(responseJson)
+
         this.vaultToken = responseJson.auth.client_token;
     }
 
