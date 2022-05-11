@@ -2,10 +2,9 @@ const { Sequelize } = require('sequelize')
 const Vault = require('../utils/vault');
 
 const sequelize = new Sequelize(
-    config.database,
     '',
     '',
-    config
+    '',
 )
 sequelize.beforeConnect(async (config) => {
     const vault = new Vault(process.env.VAULT_URL, process.env.JWT_PATH);
