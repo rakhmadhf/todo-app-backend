@@ -19,17 +19,23 @@ const fetchConfig = async () => {
     db_password = config.db_password;
 }
 
-fetchConfig().then(() => {
-    sequelize = new Sequelize(
-        db_name,
-        db_user,
-        db_password,
-        {
-            host: process.env.DB_HOST,
-            dialect: 'mysql',
-            logging: process.env.NODE_ENV === 'production' ? false : console.log
-        }
-    )
-})
 
-module.exports = sequelize
+
+const initSequelize = () => {
+    fetchConfig().then(() => {
+        sequelize = new Sequelize(
+            db_name,
+            db_user,
+            db_password,
+            {
+                host: process.env.DB_HOST,
+                dialect: 'mysql',
+                logging: process.env.NODE_ENV === 'production' ? false : console.log
+            }
+        )
+    })
+
+    return sequelize
+}
+
+module.exports = initSequelize;
