@@ -19,8 +19,9 @@ const fetchConfig = async () => {
 }
 
 const initSequelize = () => {
+    let sequelize;
     fetchConfig().then(() => {
-        const sequelize = new Sequelize(
+        sequelize = new Sequelize(
             db_name,
             db_user,
             db_password,
