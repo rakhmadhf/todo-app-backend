@@ -5,6 +5,9 @@ const sequelize = new Sequelize(
     '',
     '',
     '',
+    {
+        dialect: 'mysql'
+    }
 )
 sequelize.beforeConnect(async (config) => {
     const vault = new Vault(process.env.VAULT_URL, process.env.JWT_PATH);
