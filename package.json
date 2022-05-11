@@ -1,6 +1,6 @@
 {
   "name": "notes-app-backend",
-  "version": "1.0.0",
+  "version": "vault-1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
