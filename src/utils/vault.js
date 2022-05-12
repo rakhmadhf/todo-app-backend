@@ -41,7 +41,7 @@ class Vault {
 
         const responseJson = await response.json();
 
-        return responseJson.data;
+        return responseJson.data.data;
     }
 }
 
