@@ -15,6 +15,7 @@ pipeline {
 
                             withCredentials([file(credentialsId: 'docker-credential', variable: 'dockerConfig')]) {
                                 DOCKER_CONFIG = "$dockerConfig"
+                                sh 'cp $dockerConfig /kaniko/.docker/config.json'
                                 sh """#!/busybox/sh -xe
                                 /kaniko/executor \
                                 --context=`pwd` \
