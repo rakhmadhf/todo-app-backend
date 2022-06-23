@@ -14,7 +14,7 @@ pipeline {
                             props = readJSON file:'package.json'
 
                             withCredentials([file(credentialsId: 'docker-credential', variable: 'dockerConfig')]) {
-                                DOCKER_CONFIG = $dockerConfig
+                                DOCKER_CONFIG = "$dockerConfig"
                                 sh """#!/busybox/sh -xe
                                 /kaniko/executor \
                                 --context=`pwd` \
