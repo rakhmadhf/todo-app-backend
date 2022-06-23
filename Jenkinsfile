@@ -1,37 +1,10 @@
 pipeline {
         agent {
-            kubernetes {
-                label "default"
-                defaultContainer 'jnlp'
-                yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  name: kaniko
-spec:
-  containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
-    imagePullPolicy: IfNotPresent
-    command:
-    - /busybox/sh
-    tty: true
-    volumeMounts:
-      - name: kaniko-secret
-        mountPath: /kaniko/.docker
-  restartPolicy: Never
-  volumes:
-    - name: kaniko-secret
-      secret:
-        secretName: registry-cred
-        items:
-          - key: .dockerconfigjson
-            path: config.json
-                """
-            }
+            label 'kaniko'
         }
         environment {
             imageName = 'hifra/todoapp-backend-kaniko'
+
         }
         stages {
             stage('Build and push image') {
@@ -39,12 +12,15 @@ spec:
                     container('kaniko') {
                         script {
                             props = readJSON file:'package.json'
-                            sh """#!/busybox/sh -xe
-                            /kaniko/executor \
-                            --context=`pwd` \
-                            --destination=$imageName:${props.version} \
-                            --destination=$imageName:latest
-                            """
+
+                            withCredentials([file(credentialsId: 'docker-credential', variable: 'DOCKER_CONFIG')]) {
+                                sh """#!/busybox/sh -xe
+                                /kaniko/executor \
+                                --context=`pwd` \
+                                --destination=$imageName:${props.version} \
+                                --destination=$imageName:latest
+                                """
+                            }
                         }
                     }
                 }
