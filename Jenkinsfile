@@ -14,8 +14,7 @@ pipeline {
                             props = readJSON file:'package.json'
 
                             withCredentials([file(credentialsId: 'docker-credential', variable: 'dockerConfig')]) {
-                                // sh 'cp $dockerConfig /kaniko/.docker/config.json'
-                                sh "export DOCKER_CONFIG=$dockerConfig"
+                                sh 'cp $dockerConfig /kaniko/.docker/config.json'
                                 sh """#!/busybox/sh -xe
                                 /kaniko/executor \
                                 --context=`pwd` \
